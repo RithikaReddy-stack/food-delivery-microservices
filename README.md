@@ -35,4 +35,96 @@ This system simulates a real-world scalable application involving users, restaur
 
 ## 🗺️ Architecture Diagram (Conceptual)
 
+\`\`\`
+[ Client (Angular) ]
+        |
+        v
+[ API Gateway (8080) ]
+        |
+        +--> [ User Service (8081) ]
+        +--> [ Restaurant Service (8082) ]
+        +--> [ Order Service (8083) ]
+        +--> [ Delivery Service (8084) ]
+        +--> [ Notification Service (8085) ]
+                  ^
+                  |
+            [ Kafka Broker ]
+\`\`\`
+
+---
+
+## 🚀 How to Run
+
+### ✅ Prerequisites
+
+- Java 17+
+- Maven
+- Docker & Docker Compose
+- Kafka & Zookeeper (local or containerized)
+- MySQL / MongoDB
+
+### 🔧 Run Without Docker
+
+1. Start MySQL and MongoDB
+2. Start Zookeeper and Kafka
+3. Start Eureka server:  
+   \`cd eureka-server && mvn spring-boot:run\`
+4. Start API Gateway:  
+   \`cd api-gateway && mvn spring-boot:run\`
+5. Start remaining services (user, order, etc.)
+
+---
+
+### 🐳 Run with Docker (Coming Soon)
+
+\`\`\`bash
+docker-compose up --build
+\`\`\`
+
+> Dockerfile and docker-compose.yml are being prepared.
+
+---
+
+## 🔐 Authentication
+
+- JWT token is used for user login and API access
+- Login endpoint returns JWT in response
+- Use Authorization: Bearer \`<token>\` in API headers
+
+---
+
+## 📫 Kafka Topics (Example)
+
+| Topic Name         | Producer         | Consumer             |
+|--------------------|------------------|----------------------|
+| \`order_placed\`     | Order Service     | Notification Service |
+| \`delivery_assigned\`| Delivery Service  | Notification Service |
+
+---
+
+## 📘 API Documentation
+
+Swagger available (if enabled) at:
+
+\`\`\`
+http://localhost:8081/swagger-ui/
+http://localhost:8082/swagger-ui/
+...
+\`\`\`
+
+---
+
+## ✍️ Author
+
+👩‍💻 **Rithika Reddy**  
+[GitHub](https://github.com/RithikaReddy-stack)
+
+---
+
+## 📌 Future Enhancements
+
+- Payment Gateway Integration
+- Redis Caching
+- Kubernetes Deployment (K8s)
+- Centralized Logging with ELK
 

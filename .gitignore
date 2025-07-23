@@ -1,0 +1,22 @@
+ECHO is on.
+# Ignore build outputs
+target/
+*.jar
+
+# IDE-specific
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env files
+.env
+

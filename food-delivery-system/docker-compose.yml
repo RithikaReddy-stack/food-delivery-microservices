@@ -1,0 +1,104 @@
+version: "3.8"
+
+services:
+
+  # Eureka Server
+  eureka-server:
+    build: ./eureka-server
+    ports:
+      - "8761:8761"
+
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+
+  # User Service
+  user-service:
+    build: ./user-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+      - mysql
+
+  # Restaurant Service
+  restaurant-service:
+    build: ./restaurant-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+      - mysql
+
+  # Order Service
+  order-service:
+    build: ./order-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+      - kafka
+      - mysql
+
+  # Notification Service
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      - eureka-server
+      - kafka
+      - mongo
+
+  # Delivery Service
+  delivery-service:
+    build: ./delivery-service
+    ports:
+      - "8085:8085"
+    depends_on:
+      - eureka-server
+      - kafka
+      - mysql
+
+  # Kafka Dependencies
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  # MongoDB for Notification Service
+  mongo:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+
+  # MySQL for other services
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: Rithikaanoop2710!
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
